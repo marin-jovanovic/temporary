@@ -1,1 +1,0 @@
-INPUT_PATH = "input1.txt"
