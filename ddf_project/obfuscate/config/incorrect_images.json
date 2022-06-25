@@ -1,7 +1,4 @@
 {
-    "black": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/A_black_image.jpg/640px-A_black_image.jpg",
-    "blue": "https://www.greenlam.id/media/catalog/product/cache/21/image/9df78eab33525d08d6e5fb8d27136e95/g/s/gsc-282-light-blue_1.jpg",
-    "red": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Socialist_red_flag.svg/2560px-Socialist_red_flag.svg.png",
-    "im": "http://boschproject.org/data/images/im_08MCPVIS_800.jpg",
-    "img_1": "http://boschproject.org/data/images/im_75MCPVIS_800.jpg"
+    "im 2": "http://boschproject.org/data/images/im_08MCPVIS_800.jpg",
+    "im 1": "http://boschproject.org/data/images/im_75MCPVIS_800.jpg"
 }
