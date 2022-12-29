@@ -15,3 +15,5 @@
 
     python manage.py runserver
     npm run serve
+
+## proof of concept

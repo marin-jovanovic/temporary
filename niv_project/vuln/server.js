@@ -91,32 +91,38 @@ app.get('/signup',  function (req, res, next) {
 
 app.get('/', authHandler, function (req, res, next) {
 
-    res.send("base ok")
+    res.send("home page")
 
 });
 
 
-app.get('/user/:id', function(req, res) {
+app.get('/track_order/:id', function(req, res) {
 
 
-    let pre = `
-    <script>
-    sessionStorage.setItem("username", "john");
-    sessionStorage.setItem("sessionToken", "123");
 
-    console.log(
-        sessionStorage.getItem("username") + "/" + 
-        sessionStorage.getItem("sessionToken")
-    );
 
-    </script>
+    res.send(
+        `
 
-    `;
-    let e  = escape(req.params.id)
-    let safe = "safe: <h1>hello "+e+"</h1>"
-    let unsafe = "unsafe: <h1>hello "+req.params.id+"</h1>"
+        <script>
+    
+        sessionStorage.setItem("username", "john");
+        sessionStorage.setItem("sessionToken", "123");
 
-    res.send(pre+ safe + unsafe);
+        console.log(
+            sessionStorage.getItem("username") + "/" + 
+            sessionStorage.getItem("sessionToken")
+        );
+
+        </script>
+
+        safe: <h1> hello ${escape(req.params.id)} </h1>
+
+        unsafe: <h1> hello ${req.params.id} </h1>
+
+        `
+
+    )
 
 });
 

