@@ -99,8 +99,6 @@ app.get('/', authHandler, function (req, res, next) {
 app.get('/track_order/:id', function(req, res) {
 
 
-
-
     res.send(
         `
 

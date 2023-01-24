@@ -5,7 +5,13 @@ proof of concept
 
 install
 
-    npm i
+    vuln_xss
+
+        npm i 
+
+    vuln_csrf
+
+        npm i
 
 run
 
@@ -29,7 +35,7 @@ Attackers server is on
     http://localhost:3001
 
 
-In reality this would be two different addresses, one hosted on one server, and one on the other. In this POC both are served on same computer.
+In reality this would be two different addresses, one hosted on one server, and one on the other. In this POC both are served on same computer but principles are the same.
 
 Attackers server purpose is to log stolen data (usernames, passwords, cookies, tokens, card numbers, pins, ...).
 When malicious code is executed; data that is valuable to the attacker is sent to server. 
