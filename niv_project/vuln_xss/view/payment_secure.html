@@ -1,8 +1,11 @@
 <h3>with token</h3>
 
-<form action="/payment" method="post">
+<form action="/paymentSecure" method="post">
     <label>Sync CSRF token:</label>
-    <input type="text" name="syncCSRFToken" placeholder="syncCSRFToken">
+    <input type="text" name="syncCSRFToken" placeholder="syncCSRFToken" id="syncCSRFToken">
+    <br>
+    <label>username:</label>
+    <input type="text" name="username" placeholder="username" id="username">
     <br>
 
 
@@ -15,3 +18,35 @@
     <br>
     <input type="submit" value="Submit">
 </form>
+
+
+<script>
+
+
+function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+
+        console.log("get c")
+    console.log(ca)
+
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+document.querySelector("#syncCSRFToken").value = getCookie("syncCSRFToken").slice(1, -1);
+
+document.querySelector("#username").value = getCookie("username").slice(1, -1);
+
+
+
+</script>

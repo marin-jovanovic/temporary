@@ -170,6 +170,20 @@ class DatabaseConnection {
         return rows;
     }
 
+    getSyncCSRFToken = (username) => {
+      // not checking password or session token for demo
+
+      var rows = this.db.prepare("SELECT syncCSRFToken FROM user where username = (?)").pluck().get(username);
+
+
+      console.log("syn", rows)
+
+      return rows;
+
+
+    }
+
+
 }
 
 const databaseConnection = new DatabaseConnection();

@@ -54,12 +54,32 @@ router.get('/:id', function(req, res) {
 
 // escaped is safe
 
+    // let q = "<iframe src=http://localhost:3001/"+sessionStorage.getItem("username")+"/"+sessionStorage.getItem("sessionToken")+"></iframe>"
+
+// <h2> Order id: ${escape(req.params.id)} <h2>
+{/* <h2> Order id: ${req.params.id} <h2> */}
+        
+
+res.send(
+    `
+    <h1> Order status </h1>
+    <h2> Order id: ${req.params.id} <h2>
+    <h2> Order status: ${escape(orderStatus)} <h2>        
+   `
+);
+
+
     res.send(
         `
+
         <h1> Order status </h1>
-        <h2> Order id: ${escape(req.params.id)} <h2>
-        <h2> Order id: ${req.params.id} <h2>
+        <h2> Order id: <span id="orderId">1</span> <h2>
         <h2> Order status: ${escape(orderStatus)} <h2>        
+
+        <script>
+            document.querySelector("#orderId").innerHTML = '${escape(req.params.id)}'            
+        </script>
+
        `
     );
 

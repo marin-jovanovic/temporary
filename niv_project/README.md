@@ -17,3 +17,5 @@
     npm run serve
 
 ## proof of concept
+
+find . -type f -name "_.html" -not -path "./node_modules/_" -exec js-beautify -r {} \;

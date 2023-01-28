@@ -33,7 +33,7 @@ async function getHomeView(req, res, next) {
                 [
                     injectIntoTemplate(
                         getFileContent("./view_components/hidden_fields.html"),
-                        [authObj.sessionToken, authObj.syncCSRFToken]
+                        [authObj.sessionToken, authObj.syncCSRFToken, username]
                     )
                 ]
             )

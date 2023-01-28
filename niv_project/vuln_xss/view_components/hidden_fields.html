@@ -1,21 +1,31 @@
 <input type="text" name="sessionToken" id="sessionToken" value="<inject-here></inject-here>">
 <input type="text" name="syncCSRFToken" id="syncCSRFToken" value="<inject-here></inject-here>">
+<input type="text" name="username" id="username" value="<inject-here></inject-here>">
 
 <script>
     console.log("cookie setting")
 
     let syncCSRFToken = document.querySelector("#syncCSRFToken").value;
-    document.cookie = `syncCSRFToken = ${syncCSRFToken}`
-
     let sessionToken = document.querySelector("#sessionToken").value;
-    document.cookie = `sessionToken = ${sessionToken}`
+    let username = document.querySelector("#username").value;
 
-    // console.log(getCookie("syncCSRFToken"));
+    setCookie("syncCSRFToken", syncCSRFToken);
+    setCookie("sessionToken", sessionToken);
+    setCookie("username", username);
 
-    // sessionStorage.setItem("sessionToken", document.querySelector("#sessionToken").value);
+    function setCookie(name, value) {
 
-    // let t = sessionStorage.getItem("sessionToken"); 
-    // console.log(t);
+        console.log("set");
+
+        let baseDomain = '.localhost:3000';
+        let expireAfter = new Date();
+
+        expireAfter.setDate(expireAfter.getDate() + 7);
+
+        document.cookie=`${name}='${value}'; expires="${expireAfter}"; path=/`;
+
+    }
+
 
     function getCookie(cname) {
         let name = cname + "=";

@@ -10,14 +10,24 @@ const {
 
 
 
+const db = require("../js/db");
 
-let csrfToken = "secure token"
 
-router.post('/', function(req, res) {
+router.post('/', async function(req, res) {
 
-    console.log(req.body);
+    // console.log("body",  req.body);
 
-    if (req.body["csrfToken"] === csrfToken) {
+
+    let csrfToken = await db.getSyncCSRFToken(req.body.username);
+    let myToken = req.body["syncCSRFToken"];
+
+    console.log();
+    console.log("correct token", csrfToken);
+    console.log("my token     ", myToken)
+
+
+
+    if ((myToken === csrfToken )&& (myToken)) {
         console.log("csrf token ok");
 
         res.send(`
