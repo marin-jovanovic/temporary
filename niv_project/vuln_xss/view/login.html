@@ -1,0 +1,17 @@
+<h1>login</h1>
+
+    <input id="username" type="text" placeholder="username">
+    <input id="password" type="text" placeholder="password">
+    <button id="signupButton">login</button>
+
+<script>
+    document.querySelector("#signupButton").addEventListener("click", () =>{
+
+        console.log("clicked")
+
+        let username  = document.querySelector("#username").value;
+        let password = document.querySelector("#password").value;
+        console.log("usenrame", username, password);
+    });
+
+</script>

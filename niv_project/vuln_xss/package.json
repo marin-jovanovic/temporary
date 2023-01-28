@@ -1,19 +1,14 @@
 {
-    "name": "wim-lab-3",
     "version": "1.0.0",
-    "description": "WiM: Laboratory exercise 3",
     "main": "server.js",
     "scripts": {
         "dev": "nodemon server.js",
         "start": "node server.js",
         "seed": "node db/seed.js"
     },
-    "keywords": [
-        "express"
-    ],
-    "author": "WiM",
     "license": "MIT",
     "dependencies": {
+        "bcrypt": "^5.1.0",
         "better-sqlite3": "^8.0.1",
         "connect-pg-simple": "6.1.0",
         "cors": "^2.8.5",
@@ -21,6 +16,7 @@
         "express": "4.17.1",
         "express-session": "1.17.1",
         "express-validator": "6.4.1",
+        "fs": "^0.0.1-security",
         "pg": "8.6.0",
         "sqlite3": "^5.1.2"
     },

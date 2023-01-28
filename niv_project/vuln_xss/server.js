@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const fs = require("fs");
-const db = require("./db");
+const db = require("./js/db");
 const escape = require('escape-html');
+// const fs = require('fs');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -14,38 +14,18 @@ app.use(express.urlencoded({
 var cors = require('cors')
 app.use(cors())
 
-function authHandler(req, res, next) {
 
-/**
- * 
- * access control allow origin
- * neautenitificarni req
- * 
- * ...     credentials
- * ne moze imat ACAO *
- * i mora imat popis tocno domene koje prihvaca
- * auth req
- * 
- * 
- * 
- */
 
-    // if (req.sessionToken) {
-        next();
-    // } else {
-    //     res.redirect("/login");
-    // }
+const indexRouter = require('./routes/index');
+app.use('/', indexRouter);
 
-    //   if (req.session.user === undefined) {
-    //       req.session.err = "Please login to view the requested page."
-    //       req.session.save(() => {
-    //           res.redirect('/login');
-    //       });
-    //   } else {
-    //       next();
-    //   }
-}
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
 
+
+// app.use('/admin', adminRouter);
+// app.use('/user', userRouter);
+// app.use('/company', companyRouter);
 
 
 // app.get('/login', function(req, res, next) {
@@ -55,37 +35,8 @@ function authHandler(req, res, next) {
 // });
 
 
-// app.get('/signup', function(req, res, next) {
-
-//     fs.readFile('./signup.html', 'utf8', function(err, data) {
-//         if (err) throw err;
-//         data += (req.query['something'] || "")
-//         // res.type('text/plain');
-//         res.send(data);
-//     });
 
 
-//     // res.send("login part")
-
-// });
-
-
-app.get('/', authHandler, function(req, res, next) {
-
-    res.send(
-        `
-
-        <a href="/track_order/12345">track order number 12345</a> 
-        <br/>
-        <a href="/createPost">create post</a> 
-        <br/>
-        <a href="/viewPosts">view posts</a> 
-        <br/>
-        csrf demo : <a href="/payment">go to payment</a> 
-        `
-    )
-
-});
 
 
 app.get('/track_order/:id', function(req, res) {
@@ -266,4 +217,16 @@ app.get('/paymentCSRF', function(req, res) {
 
 
 app.listen(3000);
-console.log("listening on http://localhost:3000")
+console.log("listening on http://localhost:3000");
+
+// (async () => {
+
+//    await db.addUser("user1", "pass1");
+//    console  .log();
+// await    db.login("user1", "pass1");
+    
+
+// })();
+
+
+
