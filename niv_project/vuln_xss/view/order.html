@@ -1,0 +1,23 @@
+<h1>Track order</h1>
+
+<label>Input order id:</label>
+<input type="text" name="orderID"  id="orderId" placeholder="order Id">
+<button onclick="trackOrder()" id="trackOrder">track order</button>
+<br>
+
+
+<script>
+
+     async function trackOrder() {
+
+            let orderId = document.querySelector("#orderId").value;
+            
+            console.log("order", orderId)
+
+            window.open(`/trackOrder/${orderId}`, '_blank').focus();
+
+
+    }
+
+
+</script>
