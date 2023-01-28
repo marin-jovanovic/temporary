@@ -1,103 +1,96 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const sqlite = require("better-sqlite3");
 const fs = require("fs");
 const db = require("./db");
 const escape = require('escape-html');
-const crypto = require("crypto");
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-
-
-function insertRow(content) {
-  db.run(
-    `INSERT INTO posts (content) VALUES (?)`,
-    [content],
-    function (error) {
-      if (error) {
-        console.error(error.message);
-      }
-    }
-  );
-}
-
-function insertToken(token, username, sessionToken, form) {
-
-    db.run(
-        `INSERT INTO csrf (token, username, sessionToken, form) VALUES (?, ?, ?, ?)`,
-        [token, username, sessionToken, form],
-        function (error) {
-          if (error) {
-            console.error(error.message);
-          }
-        }
-      );
-
-    }
-
-function selectRows() {
-    var db = new sqlite("./fish.db");
-    var rows = db.prepare("SELECT * FROM posts").all();
-    return rows;    
-}
-
+app.use(express.urlencoded({
+    extended: true
+}));
+var cors = require('cors')
+app.use(cors())
 
 function authHandler(req, res, next) {
 
+/**
+ * 
+ * access control allow origin
+ * neautenitificarni req
+ * 
+ * ...     credentials
+ * ne moze imat ACAO *
+ * i mora imat popis tocno domene koje prihvaca
+ * auth req
+ * 
+ * 
+ * 
+ */
 
-    if (req.sessionToken) {
+    // if (req.sessionToken) {
         next();
+    // } else {
+    //     res.redirect("/login");
+    // }
 
-    } else {
-    res.redirect("/login");        
-    }
-
-//   if (req.session.user === undefined) {
-//       req.session.err = "Please login to view the requested page."
-//       req.session.save(() => {
-//           res.redirect('/login');
-//       });
-//   } else {
-//       next();
-//   }
+    //   if (req.session.user === undefined) {
+    //       req.session.err = "Please login to view the requested page."
+    //       req.session.save(() => {
+    //           res.redirect('/login');
+    //       });
+    //   } else {
+    //       next();
+    //   }
 }
 
 
-app.get('/login',  function (req, res, next) {
 
-    res.send("login part")
+// app.get('/login', function(req, res, next) {
 
-});
+//     res.send("login part")
 
-
-app.get('/signup',  function (req, res, next) {
-
-    fs.readFile('./signup.html', 'utf8', function (err, data) {
-        if (err) throw err;
-        data += (req.query['something'] || "")
-        // res.type('text/plain');
-        res.send(data);
-      });
+// });
 
 
-    // res.send("login part")
+// app.get('/signup', function(req, res, next) {
 
-});
+//     fs.readFile('./signup.html', 'utf8', function(err, data) {
+//         if (err) throw err;
+//         data += (req.query['something'] || "")
+//         // res.type('text/plain');
+//         res.send(data);
+//     });
 
 
-app.get('/', authHandler, function (req, res, next) {
+//     // res.send("login part")
 
-    res.send("home page")
+// });
+
+
+app.get('/', authHandler, function(req, res, next) {
+
+    res.send(
+        `
+
+        <a href="/track_order/12345">track order number 12345</a> 
+        <br/>
+        <a href="/createPost">create post</a> 
+        <br/>
+        <a href="/viewPosts">view posts</a> 
+        <br/>
+        csrf demo : <a href="/payment">go to payment</a> 
+        `
+    )
 
 });
 
 
 app.get('/track_order/:id', function(req, res) {
 
+// reflected
 
     res.send(
         `
@@ -161,7 +154,7 @@ app.get('/createPost', function(req, res) {
 
 app.get('/viewPosts', function(req, res) {
 
-    let posts = selectRows();
+    let posts = db.selectRows();
 
     let postsFormatted = "";
 
@@ -169,7 +162,7 @@ app.get('/viewPosts', function(req, res) {
         postsFormatted += '<p  style="background-color:red;">' + element.content + "</p>"
 
 
-        let e  = escape(element.content)
+        let e = escape(element.content)
 
         postsFormatted += '<p  style="background-color:powderblue;">' + e + "</p>"
 
@@ -187,6 +180,12 @@ app.get('/viewPosts', function(req, res) {
 
 });
 
+app.get("/tmp", function(req, res) {
+
+
+    res.json({"sync token": "123"});
+});
+
 app.post('/payment', function(req, res) {
 
     console.log(req.body);
@@ -199,11 +198,26 @@ app.post('/payment', function(req, res) {
 app.get('/payment', function(req, res) {
 
     res.send(`
+
+        for each user for each session we can have 
+
+        without token
         <form action="/payment" method="post">
         <input name="bankNumber" placeholder="bank number">
         <input name="amount" placeholder="amount">
         <button>pay</button>
         </form>
+
+        <br/>
+
+        with token
+        <form action="/payment" method="post">
+        <input name="token" placeholder="token123">
+        <input name="bankNumber" placeholder="bank number">
+        <input name="amount" placeholder="amount">
+        <button>pay</button>
+        </form>
+
 
     `);
 });
@@ -222,15 +236,15 @@ app.post('/paymentCSRF', function(req, res) {
         
         `);
     } else {
-    
-    // todo obfuscate
+
+        // todo obfuscate
         res.send(`
             csrf token mismatch
         `);
-        
+
     }
 
-  
+
 });
 
 app.get('/paymentCSRF', function(req, res) {
@@ -252,4 +266,4 @@ app.get('/paymentCSRF', function(req, res) {
 
 
 app.listen(3000);
-console.log("listening on 3000")
+console.log("listening on http://localhost:3000")

@@ -35,6 +35,11 @@ Attackers server is on
     http://localhost:3001
 
 
+xss
+    reflected
+    stored
+    dom based
+
 In reality this would be two different addresses, one hosted on one server, and one on the other. In this POC both are served on same computer but principles are the same.
 
 Attackers server purpose is to log stolen data (usernames, passwords, cookies, tokens, card numbers, pins, ...).

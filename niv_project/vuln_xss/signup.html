@@ -11,8 +11,11 @@
 
     <input id="username" type="text" placeholder="username">
     <input id="password" type="text" placeholder="password">
-<button id="signupButton">sign up</button>
+    <button id="signupButton">sign up</button>
 
+
+
+<!-- 
 <form action="/signup" method="post" class="form gutter">
     <fieldset class="form-fieldset">
         <legend class="form-legend">User registration form</legend>
@@ -38,16 +41,18 @@
 
 
     </fieldset>
-</form>
+</form> -->
 
 
 <script>
     document.querySelector("#signupButton").addEventListener("click", () =>{
-console.log("clicked")
 
+        console.log("clicked")
 
-
-    })
+        let username  = document.querySelector("#username").value;
+        let password = document.querySelector("#password").value;
+        console.log("usenrame", username, password);
+    });
 
 </script>
 </body>
