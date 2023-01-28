@@ -1,10 +1,15 @@
-
-const { appendFile } = require("fs");
+const {
+    appendFile
+} = require("fs");
 const db = require("./db");
-const {injectIntoTemplate} = require("../js/template_loader");
-const {getFileContent} = require("../js/file_reader");
+const {
+    injectIntoTemplate
+} = require("../js/template_loader");
+const {
+    getFileContent
+} = require("../js/file_reader");
 
-exports.authHandler  = async function(req, res, next) {
+exports.authHandler = async function(req, res, next) {
     console.log("auth MW")
 
     /**
@@ -32,37 +37,37 @@ exports.authHandler  = async function(req, res, next) {
     let credentilsOk = false;
 
     if (username && password) {
-        
-        let authObj = await db.isAuthOk(username,   password);
 
-        if (authObj.status)  {
+        let authObj = await db.isAuthOk(username, password);
+
+        if (authObj.status) {
             credentilsOk = true;
         }
 
     }
 
 
-    if (! credentilsOk) {
+    if (!credentilsOk) {
         console.log("credentials not ok");
-      
-    
-    let        navbar = injectIntoTemplate(
-                getFileContent("./view_components/navbar.html"), 
-                [
-                    getFileContent("./view_components/navbar_public_links.html"), 
-                    getFileContent('./view/login.html')
-                ]       
-            )
-        
-           
-       
+
+
+        let navbar = injectIntoTemplate(
+            getFileContent("./view_components/navbar.html"),
+            [
+                getFileContent("./view_components/navbar_public_links.html"),
+                getFileContent('./view/login.html')
+            ]
+        )
+
+
+
         let r = injectIntoTemplate(
-            getFileContent("./view_components/base.html") , 
+            getFileContent("./view_components/base.html"),
             [navbar]
         )
-    
+
         res.url = "nekinoviurl"
-    
+
         res.send(r);
 
 
@@ -78,19 +83,18 @@ exports.authHandler  = async function(req, res, next) {
     // console.log(req.body)
     // console.log(req.session)
 
-        // if (req.sessionToken) {
-            next();
-        // } else {
-        //     res.redirect("/login");
-        // }
-    
-        //   if (req.session.user === undefined) {
-        //       req.session.err = "Please login to view the requested page."
-        //       req.session.save(() => {
-        //           res.redirect('/login');
-        //       });
-        //   } else {
-        //       next();
-        //   }
-    }
-    
+    // if (req.sessionToken) {
+    next();
+    // } else {
+    //     res.redirect("/login");
+    // }
+
+    //   if (req.session.user === undefined) {
+    //       req.session.err = "Please login to view the requested page."
+    //       req.session.save(() => {
+    //           res.redirect('/login');
+    //       });
+    //   } else {
+    //       next();
+    //   }
+}

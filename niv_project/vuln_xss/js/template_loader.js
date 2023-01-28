@@ -1,8 +1,7 @@
-
 exports.injectIntoTemplate = function(template, injectingArray) {
     const splittingOperator = "<inject-here></inject-here>";
 
-    let splitted =    template.split(splittingOperator) ; 
+    let splitted = template.split(splittingOperator);
 
     let r = "";
     splitted.forEach((element, index) => {
@@ -19,5 +18,3 @@ exports.injectIntoTemplate = function(template, injectingArray) {
 
 
 }
-
-

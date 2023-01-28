@@ -1,13 +1,23 @@
-const {authHandler} = require("../js/middleware");
+const {
+    authHandler
+} = require("../js/middleware");
 var express = require('express');
-const { route } = require(".");
+const {
+    route
+} = require(".");
 var router = express.Router();
 
-const {getHomeView} = require("./homeView")
+const {
+    getHomeView
+} = require("./homeView")
 
-const {getFileContent} = require("../js/file_reader");
+const {
+    getFileContent
+} = require("../js/file_reader");
 
-const {injectIntoTemplate} = require("../js/template_loader");
+const {
+    injectIntoTemplate
+} = require("../js/template_loader");
 
 const db = require("../js/db");
 
@@ -18,15 +28,15 @@ const db = require("../js/db");
 router.get('/signup', function(req, res, next) {
 
     let navbar = injectIntoTemplate(
-        getFileContent("./view_components/navbar.html"), 
+        getFileContent("./view_components/navbar.html"),
         [
-            getFileContent("./view_components/navbar_public_links.html"), 
+            getFileContent("./view_components/navbar_public_links.html"),
             getFileContent('./view/signup.html')
-        ]       
+        ]
     )
 
     let r = injectIntoTemplate(
-        getFileContent("./view_components/base.html") , 
+        getFileContent("./view_components/base.html"),
         [navbar]
     )
 
@@ -37,38 +47,38 @@ router.get('/signup', function(req, res, next) {
 
 
 router.post('/signup',
-async function(req, res, next) {
+    async function(req, res, next) {
 
-    let isLoggedIn = await db.addUser(req.body.username, req.body.password);
+            let isLoggedIn = await db.addUser(req.body.username, req.body.password);
 
-    if (! isLoggedIn) {
+            if (!isLoggedIn) {
 
-        res.send(`
+                res.send(`
             username already exists
         `)
 
-        return
-    }    
-    
-    next();
-        // res.redirect("/");
+                return
+            }
 
-},
-getHomeView
+            next();
+            // res.redirect("/");
+
+        },
+        getHomeView
 );
 
 router.get('/login', function(req, res, next) {
 
     let navbar = injectIntoTemplate(
-        getFileContent("./view_components/navbar.html"), 
+        getFileContent("./view_components/navbar.html"),
         [
-            getFileContent("./view_components/navbar_public_links.html"), 
+            getFileContent("./view_components/navbar_public_links.html"),
             getFileContent('./view/login.html')
-        ]       
+        ]
     )
 
     let r = injectIntoTemplate(
-        getFileContent("./view_components/base.html") , 
+        getFileContent("./view_components/base.html"),
         [navbar]
     )
 
@@ -78,34 +88,34 @@ router.get('/login', function(req, res, next) {
 
 });
 
-router.post('/login', 
+router.post('/login',
     async function(req, res, next) {
 
-    //    status : true,
-    // sessionToken: sessionToken,
-    // syncCSRFToken: syncCSRFToken,
+            //    status : true,
+            // sessionToken: sessionToken,
+            // syncCSRFToken: syncCSRFToken,
 
 
-        let authObj = await db.login(req.body.username, req.body.password);
+            let authObj = await db.login(req.body.username, req.body.password);
 
-        if (authObj.status) {
-            console.log("logged in")
-            console.log(authObj)
+            if (authObj.status) {
+                console.log("logged in")
+                console.log(authObj)
 
-        } else {
-            console.log("wrong credentials")
+            } else {
+                console.log("wrong credentials")
 
-            res.send("username password mismatch")
-            return;
+                res.send("username password mismatch")
+                return;
 
-        }
+            }
 
-        next();
+            next();
 
-                    // res.redirect("/");
+            // res.redirect("/");
 
-    },
-    getHomeView
+        },
+        getHomeView
 );
 
 

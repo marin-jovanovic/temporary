@@ -1,7 +1,9 @@
-
-
-const {getFileContent} = require("../js/file_reader");
-const {injectIntoTemplate} = require("../js/template_loader");
+const {
+    getFileContent
+} = require("../js/file_reader");
+const {
+    injectIntoTemplate
+} = require("../js/template_loader");
 const db = require("../js/db");
 
 async function getHomeView(req, res, next) {
@@ -13,18 +15,17 @@ async function getHomeView(req, res, next) {
 
     let username = req.body.username;
     let password = req.body.password;
-    
-    console.log(username, password
-        );
+
+    console.log(username, password);
 
 
     let authObj = await db.login(username, password);
 
     console.log(authObj)
 
-    
+
     let navbar = injectIntoTemplate(
-        getFileContent("./view_components/navbar.html"), 
+        getFileContent("./view_components/navbar.html"),
         [
             getFileContent("./view_components/navbar_private_links.html"),
             injectIntoTemplate(
@@ -36,11 +37,11 @@ async function getHomeView(req, res, next) {
                     )
                 ]
             )
-        ]       
+        ]
     )
-    
+
     let r = injectIntoTemplate(
-        getFileContent("./view_components/base.html") , 
+        getFileContent("./view_components/base.html"),
         [navbar]
     )
 
