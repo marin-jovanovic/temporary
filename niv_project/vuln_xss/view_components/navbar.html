@@ -45,13 +45,17 @@
             let url = document.URL.split("/"); 
           let path = url[url.length - 1] 
 
-            console.log(document.querySelector(".active"))
-            console.log(document.querySelector("." + path))
 
+      console.log("url", url)
 
+      console.log("path", path)
+            console.log("active element", document.querySelector(".active"))
             document.querySelector(".active").classList.remove("active");
-          document.querySelector("." + path).classList.add("active");
 
+
+            console.log("this element", document.querySelector("." +  path))
+          //  document.querySelector("." + path).classList.add("active");
+ 
 
     };
             

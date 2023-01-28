@@ -9,19 +9,6 @@ const DATABASE_PATH = "./sqliteDatabase";
 const crypto = require("crypto");
 const bcrypt = require ('bcrypt');
 
-
-// const {
-//   Pool
-// } = require('pg');
-
-// const pool = new Pool({
-//   user: 't',
-//   host: 'localhost',
-//   database: 'nivpg',
-//   password: 'T',
-//   port: 5432,
-// });
-
 function generateRandom(length) {
   let r = crypto.randomBytes(length);
   r = r.toString("hex")
@@ -69,7 +56,7 @@ class DatabaseConnection {
 
       const createUser = this.db.transaction((username, passwordHash, sessionToken, syncCSRFToken) => {
 
-            // console.log("create suer", username, passwordHash, sessionToken, syncCSRFToken)
+  
 
             let t = this.db.prepare(
               "SELECT * FROM user WHERE USERNAME = (?)"
@@ -98,47 +85,16 @@ class DatabaseConnection {
       
       return createUser(username, passwordHash, sessionToken, syncCSRFToken);
 
-      // console.log(rows)
-  
-        // return true;
-
-
-
-
-      // try {
-
-      //   const createUser = this.db.transaction((username, passwordHash, sessionToken, syncCSRFToken) => {
-
-
-
-      //   })
-
-      //   rows = this.db.prepare(
-      //     "INSERT INTO user (username, passwordHash, sessionToken, syncCSRFToken) VALUES (?, ?, ?, ?)"
-      //   ).run(username, passwordHash, sessionToken, syncCSRFToken);
-        
-      //   // console.log(rows)
-    
-      //     return true;
-
-      // } catch {
-
-      //   console.log("username exists")
-      //   return false;
-
-      // }
-
-
-
-      // })();
 
   }
 
   isAuthOk  =   async (username, password) => {
+
+    /**
+     * return @true if @username and password hash pair exists in database  
+     */
+
     console.log("isAuthOk auth check",username,  password)
-
-    // console.log("login",username,  password)
-
 
     let correctPasswordHash = this.db.prepare(
       "SELECT passwordHash FROM user WHERE USERNAME = (?)"
@@ -147,99 +103,67 @@ class DatabaseConnection {
     if (! correctPasswordHash) {
       console.log("isAuthOk user not exists")
 
-
-        return false;
+      return false;
 
     } else {
       console.log("isAuthOk user exists");
-
       console.log("isAuthOk", correctPasswordHash)
       console.log("isAuthOk", password)
 
+      let r =  await bcrypt.compare(password, correctPasswordHash);
+  
+      console.log("isAuthOk hash matching", r)
 
-
-        let r =  await bcrypt.compare(password, correctPasswordHash);
-
-    
-          console.log("isAuthOk hash matching", r)
-
-          return r;
+      return r;
 
     }
-
-
-
-    // const loginTransaction = this.db.transaction((username, password) => {
-    //   (async () => {
-
-
-    //   let correctPasswordHash = this.db.prepare(
-    //     "SELECT passwordHash FROM user WHERE USERNAME = (?)"
-    //   ).pluck().get(username);            
-
-
-    
-
-    //   })();
-
-    //   })
-
-    //  return loginTransaction(username, password);
-
 
   }
 
   login = async  (username, password) => {
+    /**
+     * check if credentials are ok
+     * generate session token and csrf token
+     * 
+     * return @true if auth ok
+     * 
+     */
+
+    // console.log("login", username,  password)
+
+    let isAuthOk = await this.isAuthOk(username, password);
+
+    if (isAuthOk) {
+
+      let sessionToken = generateRandom(100);
+      let syncCSRFToken = generateRandom(100);
 
 
-    console.log("login",username,  password)
-
-    const loginTransaction = this.db.transaction((username, password) => {
-
-
-      let correctPasswordHash = this.db.prepare(
-        "SELECT passwordHash FROM user WHERE USERNAME = (?)"
-      ).pluck().get(username);            
-
-        if (! correctPasswordHash) {
-          console.log("user not exists")
-
-
-            return false;
-
-        } else {
-          console.log("user exists");
-
-    (async () => {
-
-      // console.log(password, correctPasswordHash)
-
-      let r =  await bcrypt.compare(password, correctPasswordHash);
-
-      // conso:le.log(r);
-  
-          console.log("hash matching", r)
-
-          return r;
-  })();
-
-        }
-
-
+      let  rows = this.db.prepare(`
+          
+          UPDATE user SET sessionToken = (?), syncCSRFToken = (?)
+          WHERE username = (?)
+        
+          `
+        ).run( sessionToken, syncCSRFToken, username);
+        
+        // console.log(rows)
     
 
-
-      })
-
-      loginTransaction(username, password);
-
-
-
+      return {
+        status : true,
+        sessionToken: sessionToken,
+        syncCSRFToken: syncCSRFToken,
+      }
 
 
-    
+    } else {
 
-  // })();
+      return {
+        status : false
+      }
+
+    }
 
   }
 
@@ -279,17 +203,6 @@ class DatabaseConnection {
 }
 
 const databaseConnection = new DatabaseConnection();
-
-// export {
-//   databaseConnection
-// }
-
-// export const db = {
-//   createDbConnection,
-//   insertRow,
-//   insertToken,
-//   selectRows
-// }
 
 
 module.exports = databaseConnection;

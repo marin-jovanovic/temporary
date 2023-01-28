@@ -1,0 +1,36 @@
+<input type="text" name="sessionToken" id="sessionToken" value="<inject-here></inject-here>">
+<input type="text" name="syncCSRFToken" id="syncCSRFToken"   value="<inject-here></inject-here>">
+
+<script>
+
+console.log("cookie setting")
+
+    let syncCSRFToken = document.querySelector("#syncCSRFToken").value;
+    document.cookie = `syncCSRFToken = ${syncCSRFToken}`  
+
+    // console.log(getCookie("syncCSRFToken"));
+
+    sessionStorage.setItem("sessionToken", document.querySelector("#sessionToken").value);
+
+    let t = sessionStorage.getItem("sessionToken"); 
+    console.log(t);
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+
+
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+</script>

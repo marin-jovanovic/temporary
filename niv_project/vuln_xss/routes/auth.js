@@ -11,7 +11,9 @@ const {injectIntoTemplate} = require("../js/template_loader");
 
 const db = require("../js/db");
 
-// console.log(getHomeView())
+
+
+
 
 router.get('/signup', function(req, res, next) {
 
@@ -33,6 +35,28 @@ router.get('/signup', function(req, res, next) {
 
 });
 
+
+router.post('/signup',
+async function(req, res, next) {
+
+    let isLoggedIn = await db.addUser(req.body.username, req.body.password);
+
+    if (! isLoggedIn) {
+
+        res.send(`
+            username already exists
+        `)
+
+        return
+    }    
+    
+    next();
+        // res.redirect("/");
+
+},
+getHomeView
+);
+
 router.get('/login', function(req, res, next) {
 
     let navbar = injectIntoTemplate(
@@ -51,117 +75,38 @@ router.get('/login', function(req, res, next) {
     res.send(r);
 
 
+
 });
 
+router.post('/login', 
+    async function(req, res, next) {
+
+    //    status : true,
+    // sessionToken: sessionToken,
+    // syncCSRFToken: syncCSRFToken,
 
 
+        let authObj = await db.login(req.body.username, req.body.password);
 
-router.post('/signup',
- function(req, res, next) {
+        if (authObj.status) {
+            console.log("logged in")
+            console.log(authObj)
 
-    (async () => {
-
-       let isLoggedIn = await db.addUser(req.body.username, req.body.password);
-
-        if (! isLoggedIn) {
-
-             res.send(`
-                username already exists
-            `)
-
-            return
         } else {
-            return next();
+            console.log("wrong credentials")
+
+            res.send("username password mismatch")
+            return;
 
         }
 
+        next();
 
-     })();
+                    // res.redirect("/");
 
-
-
-},
-//     console.log("post signup")
-//     console.log(req.body);
-
-
-//     // (async () => {
-
-//     //    let isLoggedIn = await db.addUser(req.body.username, req.body.password);
-       
-
-//         // if (isLoggedIn) {
-
-//         //     req.session.valid = true;
-//         //     res.redirect('/');
-
-//         // } else {
-
-//         //     res.send(`
-//         //         username already exists
-//         //     `)
-
-//         // }
-
-
-
-//         return next();
-
-//     //  })();
-     
-
-//     // let synchronizerToken = "123"
-//     // let sessionToken = "456"
-
-//     // res.redirect('/');
-
-//     // res.json({
-//     //     status: true,
-//     //     username: req.body.username,
-//     //     synchronizerToken:  synchronizerToken,
-//     //     sessionToken: sessionToken,
-//     // });
-
-
-// },
-
-// function(req, res, next) {
-
-//     console.log("prije")
-//     console.log(req.body);
-
-//         // res.redirect('/');
-
-
-//     return next();
-
-
-// }, 
-
-
-getHomeView);
-
-
-
-router.post('/login', function(req, res, next) {
-
-    // let navbar = injectIntoTemplate(
-    //     getFileContent("./view_components/navbar.html"), 
-    //     [
-    //         getFileContent("./view_components/navbar_public_links.html"), 
-    //         getFileContent('./view/login.html')
-    //     ]       
-    // )
-
-    // let r = injectIntoTemplate(
-    //     getFileContent("./view_components/base.html") , 
-    //     [navbar]
-    // )
-
-    res.send("post login done");
-
-
-});
+    },
+    getHomeView
+);
 
 
 

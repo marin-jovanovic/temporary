@@ -1,4 +1,4 @@
-<h1>login</h1>
+<!-- <h1>login</h1>
 
     <input id="username" type="text" placeholder="username">
     <input id="password" type="text" placeholder="password">
@@ -14,4 +14,18 @@
         console.log("usenrame", username, password);
     });
 
-</script>
+</script> -->
+
+
+<h1>login</h1>
+
+
+
+    <form action="/auth/login" method="post">
+        <label for="fname">Username:</label><br>
+        <input type="text" id="username" name="username" value="JohnDoe"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" value="password"><br><br>
+        <input type="submit" value="Submit">
+      </form> 
+
